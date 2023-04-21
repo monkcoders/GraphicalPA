@@ -3,107 +3,114 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import tranporter from "../config/emailConfig.js";
+import TempUserModel from "../models/tempUser.js";
+import ImageSetModel from "../models/imageSet.js";
 
 
 class UserController {
-    static userRegistration = async (req, res) => {
+  static userRegistration = async (req, res) => {
 
-        const { name, email, mobileNo} = req.body;
-        const user = await TempUserModel.findOne({ email: email });
-        if (user) {
-            res.send({ status: "failed", message: "Already registered with this email" })
-        } else {
-            if (name && email && password && passwordConfirmation && tc) {
-                if (password === passwordConfirmation) {
-                    try {
-                        
-                        const salt = await bcrypt.genSalt(12)
-                        const hashedPassword = await bcrypt.hash(password, salt);
-                        const userInput = new UserModel({
-                            name: name,
-                            email: email,
-                            password: hashedPassword,
-                            tc: tc
-                        })
-                        await userInput.save()
-                        //accessing  the data if the current registration was succesful 
-                        const savedUser = UserModel.findOne({ email: email });
-                        //generating token for the registered user
-                        const token = jwt.sign({ userID: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+    const { name, email, mobileNo } = req.body;
+    const user = await UserModel.findOne({ email: email });
+    if (user) {
+      res.send({ status: "failed", message: "Already registered with this email" })
+    } else {
+      if (name && email && mobileNo) {
 
-
-                        res.send({ status: 'success', message: "successfully registered", "token": token })
-                    } catch (error) {
-                        console.log(error)
-                        res.send({ status: 'failed', message: "Failed to register" })
-                    }
-                } else {
-                    res.send({ status: "failed", message: "password and password confirmation dont match" });
-                }
-            } else {
-                console.log(name, email)
-                res.send({ status: "failed", message: "All the fields are required" })
-            }
-
-        }
-    }
-
-    static userLogin = async (req, res) => {
-        const { email} = req.body;
         try {
-            if (email ) {
-                const user = await UserModel.findOne({ email: email });
-                if (user) {  
-                  const imageSet = user.populate({path:"imageSetId"})
+          const imageSet = await ImageSetModel.find({ allotedUserCount: { $lt: 10 } });
+          if (imageSet.length > 0) {
+            const imageSetId = imageSet[0]._id;
+            console.log(imageSetId);
 
-                } else {
-                    res.send({ status: "failed", message: "user not registered" })
-                }
-            } else {
-                res.send({ status: "failed", message: "all fields are required" })
-            }
+            const newTempUserInput = new TempUserModel({
+              name: name,
+              email: email,
+              mobileNo: mobileNo,
+              imageSetId: imageSetId,
+              isRegistered: false
+
+            })
+            await newTempUserInput.save();
+            const savedUser = await TempUserModel.findOne({ email: email });
+            req.params.userId = savedUser._id;
+            console.log(savedUser);
+            const allimages = await ImageSetModel.findOne({_id:savedUser.imageSetId}).populate({path:'imagesSet'})
+            
+            console.log(allimages)
+            res.send({status:"success",allimages })
+
+
+          }
+
         } catch (error) {
-            console.log(error);
-            res.send({ status: "failed", message: "login failed" })
+          console.log(error)
+          res.send({ status: 'failed', message: "Failed to register" })
         }
+      } else {
+        console.log(name, email)
+        res.send({ status: "failed", message: "All the fields are required" })
+      }
 
     }
-    static changePassword = async (req, res) => {
-        const { password, confirmPassword } = req.body
-        if (password && confirmPassword) {
-            if (password !== confirmPassword) {
-                res.send({ status: "failed", message: "Password and confirm password do not match" })
+  }
 
-            } else {
-                const salt = await bcrypt.genSalt(12)
-                const newHashedPassword = await bcrypt.hash(password, salt);
-                await UserModel.findByIdAndUpdate(req.user._id, { $set: { password: newHashedPassword } })
-            } res.send({ status: "success", message: "password changed successfully" })
+  static userLogin = async (req, res) => {
+    const { email } = req.body;
+    try {
+      if (email) {
+        const user = await UserModel.findOne({ email: email });
+        if (user) {
+          const imageSet = user.populate({ path: "imageSetId" })
+
         } else {
-            res.send({ status: "failed", message: "Both fields are required" })
+          res.send({ status: "failed", message: "user not registered" })
         }
+      } else {
+        res.send({ status: "failed", message: "all fields are required" })
+      }
+    } catch (error) {
+      console.log(error);
+      res.send({ status: "failed", message: "login failed" })
     }
 
-    static loggedUser = async (req, res) => {
-        res.send({ "user": req.user });
+  }
+  static changePassword = async (req, res) => {
+    const { password, confirmPassword } = req.body
+    if (password && confirmPassword) {
+      if (password !== confirmPassword) {
+        res.send({ status: "failed", message: "Password and confirm password do not match" })
+
+      } else {
+        const salt = await bcrypt.genSalt(12)
+        const newHashedPassword = await bcrypt.hash(password, salt);
+        await UserModel.findByIdAndUpdate(req.user._id, { $set: { password: newHashedPassword } })
+      } res.send({ status: "success", message: "password changed successfully" })
+    } else {
+      res.send({ status: "failed", message: "Both fields are required" })
     }
+  }
 
-    static sendPasswordResetMail = async (req, res) => {
-        const { email } = req.body
-        if (email) {
-            const user = await UserModel.findOne({ email: email });
-            if (user) {
-                const secret = user._id + process.env.JWT_SECRET_KEY;
-                const token = jwt.sign({ userID: user._id }, secret, { expiresIn: '15m' });
-                const link = process.env.FRONTEND_URL + `/reset/${user._id}/${token}`
-                console.log(link)
+  static loggedUser = async (req, res) => {
+    res.send({ "user": req.user });
+  }
 
-                //send email
-                let info = await tranporter.sendMail({
-                    from: process.env.EMAIL_FROM,
-                    to: user.email,
-                    subject: "gym - Password Reset Link",
-                    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  static sendPasswordResetMail = async (req, res) => {
+    const { email } = req.body
+    if (email) {
+      const user = await UserModel.findOne({ email: email });
+      if (user) {
+        const secret = user._id + process.env.JWT_SECRET_KEY;
+        const token = jwt.sign({ userID: user._id }, secret, { expiresIn: '15m' });
+        const link = process.env.FRONTEND_URL + `/reset/${user._id}/${token}`
+        console.log(link)
+
+        //send email
+        let info = await tranporter.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: user.email,
+          subject: "gym - Password Reset Link",
+          html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -619,44 +626,44 @@ class UserController {
     </table>
   </body>
 </html>`
-                })
-                res.send({ status: "success", message: "Password reset email sent... PLease check your email", "info": info })
-            } else {
-                res.send({ status: "failed", message: "email not registered" })
+        })
+        res.send({ status: "success", message: "Password reset email sent... PLease check your email", "info": info })
+      } else {
+        res.send({ status: "failed", message: "email not registered" })
 
-            }
-        } else {
-            res.send({ status: "failed", message: "email is required" })
-        }
+      }
+    } else {
+      res.send({ status: "failed", message: "email is required" })
     }
+  }
 
-    static resetPassword = async (req, res) => {
-        const { password, confirmPassword } = req.body
-        const { id, token } = req.params
-        const user = await UserModel.findById(id)
-        const secret = user._id + process.env.JWT_SECRET_KEY
-        try {
-            jwt.verify(token, secret);
-            if (password && confirmPassword) {
-                if (password !== confirmPassword) {
-                    res.send({ status: "failed", message: "password and confirm password dont match please try again" })
-                }
-                else {
-                    const salt = await bcrypt.genSalt(12)
-                    const newHashedPassword = await bcrypt.hash(password, salt);
-                    await UserModel.findByIdAndUpdate(user._id, { $set: { password: newHashedPassword } })
-                    res.send({ status: "success", message: "Password has been reset" })
-
-                }
-            } else {
-                res.send({ status: "failed", message: "both fields are required" })
-
-            }
-        } catch (error) {
-            console.log(error)
-            res.send({ status: "failed", message: "invalid token" })
+  static resetPassword = async (req, res) => {
+    const { password, confirmPassword } = req.body
+    const { id, token } = req.params
+    const user = await UserModel.findById(id)
+    const secret = user._id + process.env.JWT_SECRET_KEY
+    try {
+      jwt.verify(token, secret);
+      if (password && confirmPassword) {
+        if (password !== confirmPassword) {
+          res.send({ status: "failed", message: "password and confirm password dont match please try again" })
         }
+        else {
+          const salt = await bcrypt.genSalt(12)
+          const newHashedPassword = await bcrypt.hash(password, salt);
+          await UserModel.findByIdAndUpdate(user._id, { $set: { password: newHashedPassword } })
+          res.send({ status: "success", message: "Password has been reset" })
+
+        }
+      } else {
+        res.send({ status: "failed", message: "both fields are required" })
+
+      }
+    } catch (error) {
+      console.log(error)
+      res.send({ status: "failed", message: "invalid token" })
     }
+  }
 }
 
 export default UserController;

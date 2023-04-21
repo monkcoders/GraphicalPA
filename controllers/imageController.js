@@ -17,8 +17,10 @@ class imageController{
             cb(null, 'uploads')
         },
         filename: (req, file, cb) => {
-            cb(null, file.fieldname + '-' + Date.now())
-        }
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const fileExt = path.extname(file.originalname);
+            cb(null, file.fieldname + '-' + uniqueSuffix + fileExt);
+          }
     });
     
     static upload = multer({ storage: imageController.storage });
@@ -29,7 +31,7 @@ class imageController{
             if(err){
                 console.log(err);
             }
-            console.log(data)
+
 
             res.render('imagepage',{items: data})
         })
@@ -38,6 +40,8 @@ class imageController{
     static postImage = async (req, res, next) => {
         try {
             const fileArray = req.files;
+            let imageObjectIds=[];
+            console.log(fileArray)
             const promises = fileArray.map(async (file) => {
                 const obj = {
                     name: req.body.name,
@@ -47,14 +51,32 @@ class imageController{
                     }
                 }
                 const userImageInput = new ImageModel(obj)
+                imageObjectIds.push(userImageInput._id);
                 return await userImageInput.save();
             })
+            console.log(imageObjectIds)
+            const newImageSet = new ImageSetModel(
+                {
+                imagesSet:imageObjectIds,
+                allotedUserCount: 0,
+                isUserProvided:false,
+                setCategory:req.body.name
+                }
+            ) 
+            console.log(newImageSet)
+            await newImageSet.save()
             await Promise.all(promises);
             res.redirect('/api/user/');
         } catch (error) {
             console.log(error);
             next(error);
         }
+    }
+
+    static showSetImages = async (req,res)=>{
+        const tempUserId = req.params
+        console.log(tempUserId)
+        
     }
     
     

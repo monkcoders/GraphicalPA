@@ -11,6 +11,6 @@ const tempUserSchema = new mongoose.Schema({
     isRegistered:{type:Boolean, default:false}
 })
 
-const TempUserModel = mongoose.model("tempUser",userSchema )
+const TempUserModel = mongoose.model("tempUser",tempUserSchema )
 
 export default TempUserModel;
