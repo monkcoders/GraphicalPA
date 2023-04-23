@@ -17,6 +17,7 @@ router.post('/',imageController.upload.array('image',16), imageController.postIm
 
 
 router.post('/register', UserController.userRegistration);
+router.get('/register', UserController.getRegister)
 router.post('/login', UserController.userLogin);
 router.post('/password/:email',PasswordController.checkLoginPassword)
 router.post('/send-reset-password-email',UserController.sendPasswordResetMail)

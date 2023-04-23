@@ -11,6 +11,7 @@ class UserController {
   static userRegistration = async (req, res) => {
 
     const { name, email, mobileNo } = req.body;
+    console.log(name,email,mobileNo)
     const user = await UserModel.findOne({ email: email });
     if (user) {
       res.send({ status: "failed", message: "Already registered with this email" })
@@ -38,7 +39,7 @@ class UserController {
             const allimages = await ImageSetModel.findOne({_id:savedUser.imageSetId}).populate({path:'imagesSet'})
             
             console.log(allimages)
-            res.send({status:"success",allimages })
+            res.render('selectpassword',{items: allimages})
 
 
           }
@@ -54,7 +55,9 @@ class UserController {
 
     }
   }
-
+  static getRegister = async (req,res)=>{
+    res.render('register')
+  }
   static userLogin = async (req, res) => {
     const { email } = req.body;
     try {

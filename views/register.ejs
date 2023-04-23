@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Image Uploading</title>
+</head>
+
+<body>
+	<h1>SignUp</h1>
+	<hr />
+	<div>
+	<form action="/api/user/register" method="POST" >
+		<div>
+		<label for="name">Name</label>
+		<input
+			type="text"
+			id="name"
+			placeholder="Name"
+			value=""
+			name="name"
+			required
+		/>
+		</div>
+		<div>
+		<label for="email">Email</label>
+		<input
+			type="email"
+			id="email"
+			placeholder="email"
+			value=""
+			name="email"
+			required
+		/>
+		</div>
+        <div>
+            <label for="mobileNo">Mobile Number</label>
+            <input
+                type="number"
+                id="mobileNo"
+                placeholder="mobileNo"
+                value=""
+                name="mobileNo"
+                required
+            />
+            </div>
+		<div>
+		<button type="submit">Submit</button>
+		</div>
+	</form>
+	</div>
