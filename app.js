@@ -7,6 +7,13 @@ import connectDB from './config/connectdb.js'
 import userRoutes from './routes/userRoutes.js'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import bodyParser from 'body-parser'
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
 
 app.set("view engine", "ejs");
 
@@ -23,11 +30,12 @@ const DATABASE_URL= process.env.DATABASE_URL
 
 //cors policy
 app.use(cors())
+app.use(express.json())
 
 //database connectio 
 connectDB(DATABASE_URL);
 
-app.use(express.json())
+
 
 
 

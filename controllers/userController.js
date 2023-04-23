@@ -6,10 +6,18 @@ import tranporter from "../config/emailConfig.js";
 import TempUserModel from "../models/tempUser.js";
 import ImageSetModel from "../models/imageSet.js";
 
+const shuffleArray = array => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
 
 class UserController {
   static userRegistration = async (req, res) => {
-
+    console.log(req.body)
     const { name, email, mobileNo } = req.body;
     console.log(name,email,mobileNo)
     const user = await UserModel.findOne({ email: email });
@@ -37,9 +45,10 @@ class UserController {
             req.params.userId = savedUser._id;
             console.log(savedUser);
             const allimages = await ImageSetModel.findOne({_id:savedUser.imageSetId}).populate({path:'imagesSet'})
-            
+            const item = allimages.imagesSet
+            shuffleArray(item)
             console.log(allimages)
-            res.render('selectpassword',{items: allimages})
+            res.render('imagegrid',{items: item})
 
 
           }

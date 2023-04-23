@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Grid Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+      .img-dim{
+        height: 150px;
+        width: 150px;
+
+      }
+   
+    </style>
+  </head>
+  <body>
+    <h1>Image Grid Example</h1>
+    <div class="container h-100 d-flex align-items-center justify-content-center">
+      <div class="row justify-content-md-center">
+        <% items.forEach(function(element) { %>
+        <div class="col-md-3 img-div">
+          <img src="data:image/<%=element.image.contentType%>;base64,<%=element.image.data.toString('base64')%>" class="img-fluid img-dim" data-image-id="<%=element._id%>">
+        </div>
+        <% }); %>
+      </div>
+      
+    </div>
+    <button onclick="d">Next</button>
+    <form action="/api/user/password/" method="post">
+      <input type="hidden" name="imageIds" id="imageIdsInput">
+      <button type="submit" onclick="passData()">Submit</button>
+    </form>
+    <!-- Include Bootstrap JS -->
+    <script>
+      // Get all elements with the class name "example"
+      const imageIds = [];
+
+// Get all image elements
+const images = document.querySelectorAll('.img-div img');
+
+// Add a click event listener to each image element
+images.forEach(image => {
+  image.addEventListener('click', () => {
+    // Get the image ID from the data attribute
+    const imageId = image.dataset.imageId;
+    
+    // Add the image ID to the array
+    imageIds.push(imageId);
+    
+    // Do something with the image IDs
+    console.log(imageIds);
+  });
+});
+
+function passData(){
+  const imageIdsInput = document.getElementById('imageIdsInput');
+  imageIdsInput.value = JSON.stringify(imageIds);
+  console.log(imageIdsInput.value)
+}
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
