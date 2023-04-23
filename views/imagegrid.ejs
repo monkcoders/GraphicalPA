@@ -9,7 +9,16 @@
       .img-dim{
         height: 150px;
         width: 150px;
-
+        margin: 10px;
+      }
+      .img-div{
+        width: 20%;
+      }
+      .row-style{
+        width: 65%;
+      }
+      .col-style{
+        padding: 5px;
       }
    
     </style>
@@ -17,10 +26,12 @@
   <body>
     <h1>Image Grid Example</h1>
     <div class="container h-100 d-flex align-items-center justify-content-center">
-      <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center row-style">
         <% items.forEach(function(element) { %>
         <div class="col-3 img-div">
-          <img src="data:image/<%=element.image.contentType%>;base64,<%=element.image.data.toString('base64')%>" class="img-fluid img-dim m-2" data-image-id="<%=element._id%>">
+          <div class="col-style">
+            <img src="data:image/<%=element.image.contentType%>;base64,<%=element.image.data.toString('base64')%>" class="img-fluid img-dim m-2" data-image-id="<%=element._id%>">
+          </div>
         </div>
         <% }); %>
       </div>
