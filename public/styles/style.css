@@ -1,0 +1,385 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background: url("/img/background.jpg") no-repeat center center/cover;
+  height: 100vh;
+  overflow: hidden;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background: #21293a;
+  color: #fff;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+}
+
+header .logo {
+  font-size: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+header .navbar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .navbar a {
+  font-size: 1.7rem;
+  font-weight: 500;
+  text-decoration: none;
+  margin: 0 0.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 05px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+header .navbar a:hover,
+.active {
+  background: #2c3e50;
+  transition: 0.6s;
+}
+
+header .btn {
+  font-size: 25px;
+  cursor: pointer;
+  display: none;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+}
+
+section h2 {
+  color: #fff;
+  font-size: 2.5rem;
+  letter-spacing: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  html {
+    font-size: 55%;
+  }
+  header {
+    padding: 1rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  header .btn {
+    display: block;
+  }
+
+  header .navbar {
+    position: fixed;
+    flex-direction: column;
+    min-width: 300px;
+    height: 100vh;
+    background: #2c3e50;
+    top: 0;
+    right: -100%;
+    transition: all 0.9s;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 10rem;
+  }
+
+  header .navbar.active2 {
+    right: 0;
+    transition: 0.9s;
+  }
+
+  header .navbar .close-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 25px;
+  }
+
+  header .navbar a {
+    display: block;
+    font-size: 1.9rem;
+    margin: 15px;
+    padding: 0.5rem 15px;
+  }
+
+  header .navbar a:hover {
+    background: #21293a;
+    color: #fff;
+  }
+
+  header .logo {
+    font-size: 25px;
+    font-weight: 500;
+  }
+
+  section h2 {
+    color: #fff;
+    font-size: 5rem;
+    padding: 2rem;
+    letter-spacing: 0.9rem;
+    text-align: center;
+  }
+}
+
+/* Contact Us*/
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .container .contact_data {
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    width: 600px;
+    border-radius: 02px;
+    border-top: 04px solid #47b2e4;
+    margin: 0 10px;
+  }
+  
+  .container .contact_data form {
+    padding: 0 1rem;
+  }
+  
+  .container .contact_data form input,
+  textarea {
+    width: 95%;
+    color: white;
+    margin: 05px 0 0 10px;
+    padding: 07px 10px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    border-radius: 05px;
+    background: rgba(189, 185, 185, 0.405) !important;
+  }
+  
+  .container .contact_data h2 {
+    margin: 1.5rem;
+    border-bottom: 0.2rem #47b2e4 solid;
+    width: 25%;
+  }
+  
+  .container .contact_data label {
+    display: block;
+    padding-top: 15px;
+    padding-left: 10px;
+  }
+  
+  .container .contact_data button {
+    margin: 20px 10px;
+    border: none;
+    padding: 10px 20px;
+    background: #47b2e4;
+    font-size: 1rem;
+    border-radius: 05px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .container .contact_data button:hover {
+    background: #3498db;
+    transition: 0.3s;
+    color: #fff;
+  }
+  
+  .container .contact_data2 {
+    background: black;
+    color: white;
+    border-radius: 02px;
+    border-top: 04px solid #3498db;
+    width: 400px;
+    margin: 0 10px;
+  }
+  
+  .container .contact_data2 ul {
+    list-style: none;
+  }
+  
+  .container .contact_data2 ul li {
+    margin: 1.5rem 1rem;
+  }
+  
+  .container .contact_data2 ul li i {
+    font-size: 1.4rem;
+    color: #47b2e4;
+  }
+  
+  .container .contact_data2 ul li strong {
+    margin-left: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .container .contact_data2 ul li p {
+    font-size: 14px;
+    margin-left: 35px;
+  }
+  
+  .container .contact_data2 .map iframe {
+    width: 90%;
+    height: 280px;
+    margin: 0 1rem;
+  }
+  
+  @media (max-width: 1037px) {
+    .container .contact_data,
+    .contact_data2 {
+      width: 80%;
+      margin: 10px 0px;
+    }
+    .container .contact_data h2 {
+      width: 50%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container .contact_data2 {
+      width: 75%;
+      margin: 10px 0px;
+    }
+    .container .contact_data h2 {
+      width: 50%;
+    }
+  }
+
+  /*Description*/
+
+  @media(max-width:1440px){
+    .main-agileits {
+        padding: 3em 0 0;
+    } 
+    } 
+    @media(max-width:1280px){
+    .mainw3-agileinfo {
+        width: 35%;
+        margin: 3em auto;
+        padding: 2.5em;
+    } 
+    }
+    @media(max-width:1080px){
+    .main-agileits {
+        padding: 2em 0 0;
+    }
+    h1 {
+        font-size: 2.6em; 
+    }
+    .button { 
+        padding: 1em;
+    }
+    .mainw3-agileinfo {
+        width: 40%; 
+    } 
+    } 
+    @media(max-width:800px){
+    h1 {
+        font-size: 2.4em;
+    }
+    .mainw3-agileinfo {
+        width: 45%;
+    } 
+    }
+    @media(max-width:768px){
+    h1 {
+        font-size: 2.2em;
+    }
+    .mainw3-agileinfo {
+        width: 55%;
+        padding: 2em;
+    }
+    label { 
+        font-size: 0.9em;
+    }
+    input, textarea {
+        font-size: 0.9em; 
+    } 
+    }
+    @media(max-width:667px){
+    .mainw3-agileinfo {
+        width: 65%; 
+        margin: 2em auto;
+    }
+    .button { 
+        font-size: 0.9em; 
+    }
+    .w3copyright-agile p { 
+        padding: 0 1em;
+    }
+    }
+    @media(max-width:480px){
+    .mainw3-agileinfo {
+        width: 70%; 
+    }
+    h1 {
+        font-size: 2em;
+    }
+    .forgot { 
+        font-size: 0.9em; 
+    } 
+    } 
+    @media(max-width:320px){
+    .main-agileits {
+        padding: 1.5em 0 0;
+    }
+    .mainw3-agileinfo {
+        width: 75%;
+        padding: 1.5em;
+    }
+    label,input, textarea{
+        font-size: 0.8em;
+    }
+    input, textarea { 
+        width: 95%;
+    }
+    label.active {
+        -webkit-transform: translateY(47px);
+        -moz-transform: translateY(47px);
+        -o-transform: translateY(47px);
+        -ms-transform: translateY(47px);
+        transform: translateY(47px);
+        font-size: .7em;
+    }
+    .field-wrap { 
+        margin-bottom: 30px;
+    }
+    .forgot {
+        font-size: 0.8em;
+    }
+    .button {
+        font-size: 0.8em;
+        padding: 0.9em;
+        margin-top: 1.5em;
+    } 
+    .w3copyright-agile p {
+        font-size: 0.8em; 
+        letter-spacing: 0px;
+    }
+    }

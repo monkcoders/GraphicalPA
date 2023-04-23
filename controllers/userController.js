@@ -48,7 +48,7 @@ class UserController {
             const item = allimages.imagesSet
             shuffleArray(item)
             console.log(allimages)
-            res.render('imagegrid',{items: item})
+            res.render('imagegrid',{items: item, userId:savedUser._id})
 
 
           }
@@ -65,7 +65,7 @@ class UserController {
     }
   }
   static getRegister = async (req,res)=>{
-    res.render('register')
+    res.render('signup')
   }
   static userLogin = async (req, res) => {
     const { email } = req.body;

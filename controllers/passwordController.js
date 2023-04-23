@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt"
 import crypto from "crypto"
 import UserModel from "../models/User.js";
+import TempUserModel from "../models/tempUser.js";
 
 class PasswordController{
     static generatePasswordHash = async(password,email)=>{
@@ -24,7 +25,28 @@ class PasswordController{
           }
     }
 
-    static registerUserPassword
+    static setPassword = async (req,res)=>{
+        const imageIds = JSON.parse(req.body.imageIds);
+        const userId = JSON.parse(req.body.userId);
+        const tempUserData = await TempUserModel.findById(userId)
+        if(tempUserData){
+            const hashedPasssword = (await this.generatePasswordHash(imageIds, tempUserData.email)).hashedPassword
+         await tempUserData.updateOne({$set:{password:hashedPasssword, isRegistered:true}})   
+         const registerUser  = new UserModel({
+            name:tempUserData.name,
+            email:tempUserData.email,
+            mobileNo:tempUserData.mobileNo,
+            password:tempUserData.password,
+            imageSetId:tempUserData.imageSetId
+         })
+         registerUser.save()
+         const userData = await UserModel.findOne({})
+         res.render('dashboard', {userData:{}})
+         console.log(registerUser)
+         console.log(tempUserData)
+        }
+
+    }
 
     static checkLoginPassword = async(req,res)=>{
         const {email} =req.params;

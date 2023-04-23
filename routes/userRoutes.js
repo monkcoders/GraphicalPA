@@ -15,6 +15,8 @@ router.use('/loggeduser',checkUserAuth)
 router.get('/',imageController.getImage )
 router.post('/',imageController.upload.array('image',16), imageController.postImage);
 
+router.post('/password',PasswordController.setPassword)
+
 
 router.post('/register', UserController.userRegistration);
 router.get('/register', UserController.getRegister)

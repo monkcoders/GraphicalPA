@@ -6,7 +6,6 @@ const tempUserSchema = new mongoose.Schema({
     email:{type:String, required:true, trim:true},
     mobileNo:{type:Number, required:true, trim:true},
     password:{type:String, trim:true},
-    confirmPassword:{type:String, trim:true},
     imageSetId:{type:mongoose.Types.ObjectId, ref:'imageSet'},
     isRegistered:{type:Boolean, default:false}
 })
