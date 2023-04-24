@@ -33,7 +33,7 @@ class imageController{
             }
 
 
-            res.render('imagepage',{items: data})
+            res.render('imageupload',{items: data})
         })
     }
     

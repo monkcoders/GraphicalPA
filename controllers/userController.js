@@ -67,13 +67,23 @@ class UserController {
   static getRegister = async (req,res)=>{
     res.render('signup')
   }
+
+  static getLogin = async (req,res)=>{
+    res.render('login')
+  }
+
+  
   static userLogin = async (req, res) => {
     const { email } = req.body;
     try {
       if (email) {
         const user = await UserModel.findOne({ email: email });
         if (user) {
-          const imageSet = user.populate({ path: "imageSetId" })
+          
+          const allimages = await ImageSetModel.findOne({_id:user.imageSetId}).populate({path:'imagesSet'})
+            const item = allimages.imagesSet
+            shuffleArray(item)
+            res.render('imagegridlogin',{items: item, userId:user._id})
 
         } else {
           res.send({ status: "failed", message: "user not registered" })

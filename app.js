@@ -21,7 +21,7 @@ app.set("view engine", "ejs");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(__dirname + '/public/'));
+app.use(express.static(__dirname + '/public'));
 const uploadPath = __dirname+'/uploads/'
 console.log(__dirname)
 console.log(uploadPath)

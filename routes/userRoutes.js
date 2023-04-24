@@ -6,22 +6,28 @@ import checkUserAuth from "../middlewares/auth-middleware.js";
 import imageController from "../controllers/imageController.js";
 
 //route level middleware
-router.use('/changepassword', checkUserAuth)
-router.use('/loggeduser',checkUserAuth)
+// router.use('/changepassword', checkUserAuth)
+// router.use('/loggeduser',checkUserAuth)
 
 
 
+router.get('/login', UserController.getLogin)
+router.post('/login', UserController.userLogin);
 //public routes (voh routes jo bina authentication ke access kiye ja sake)(eg login register )
-router.get('/',imageController.getImage )
-router.post('/',imageController.upload.array('image',16), imageController.postImage);
+router.get('/uploadimages',imageController.getImage )
+router.post('/uploadimages',imageController.upload.array('image',16), imageController.postImage);
 
-router.post('/password',PasswordController.setPassword)
+
+//for setting and checking passwords
+router.post('/setpassword',PasswordController.setPassword)
+router.post('/password', PasswordController.checkLoginPassword)
 
 
 router.post('/register', UserController.userRegistration);
 router.get('/register', UserController.getRegister)
-router.post('/login', UserController.userLogin);
-router.post('/password/:email',PasswordController.checkLoginPassword)
+
+
+
 router.post('/send-reset-password-email',UserController.sendPasswordResetMail)
 router.post('/reset-password/:id/:token',UserController.resetPassword)
 

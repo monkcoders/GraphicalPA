@@ -27,10 +27,13 @@ class PasswordController{
 
     static setPassword = async (req,res)=>{
         const imageIds = JSON.parse(req.body.imageIds);
+        console.log(imageIds)
         const userId = JSON.parse(req.body.userId);
         const tempUserData = await TempUserModel.findById(userId)
+        console.log(tempUserData)
         if(tempUserData){
             const hashedPasssword = (await this.generatePasswordHash(imageIds, tempUserData.email)).hashedPassword
+            console.log(hashedPasssword)
          await tempUserData.updateOne({$set:{password:hashedPasssword, isRegistered:true}})   
          const registerUser  = new UserModel({
             name:tempUserData.name,
@@ -40,29 +43,28 @@ class PasswordController{
             imageSetId:tempUserData.imageSetId
          })
          registerUser.save()
-         const userData = await UserModel.findOne({})
-         res.render('dashboard', {userData:{}})
          console.log(registerUser)
-         console.log(tempUserData)
+         const userData = await UserModel.findById(registerUser._id)
+         console.log(userData)
+         res.render('dashboard',{userData:userData} )
         }
 
     }
 
     static checkLoginPassword = async(req,res)=>{
-        const {email} =req.params;
-        const {password, confirmPassword} = req.body;
-        console.log(email, password)
-        const user = await UserModel.findOne({ email: email });
-
-        if(user){
-            if(password === confirmPassword){
-            const passwordHash = (await this.generatePasswordHash(password,email)).hashedPassword;
-            console.log(passwordHash);
-            const isMatch = (passwordHash===user.password)
-            if(user.email===email  && isMatch ){
-                const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' });
-                res.send({ status: "success", message: "Login Successful", "token": token });
-
+        const imageIds = JSON.parse(req.body.imageIds);
+        const userId = JSON.parse(req.body.userId);
+        console.log(userId)
+        const userData = await UserModel.findById(userId)
+        console.log(userData)
+        if(userData){
+            const hashedPasssword = (await this.generatePasswordHash(imageIds, userData.email)).hashedPassword
+            console.log(hashedPasssword,userData.password)
+            if(hashedPasssword ===userData.password){
+                // const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' });
+                const userData = await UserModel.findById(userId).select({password:0, __v:0})
+                console.log(userData)
+                res.render('dashboard',{userData:userData} )
             }else {
                 res.send({ status: "failed", message: "wrong email or password, try again" })
             }
@@ -71,14 +73,6 @@ class PasswordController{
             res.send({status:"failed",message:"user not registered"})
         }
     }
-
-
 }
-}
-const storedHash  = await PasswordController.generatePasswordHash(["asd","bsd", "csd"], 'abhi@gmail.com')
-const passwordHash  = await PasswordController.generatePasswordHash(["asd","bsd", "csd"], 'abhi@gmail.com')
-console.log(storedHash,passwordHash)
-const isMatch = (passwordHash.hashedPassword===storedHash.hashedPassword)
 
-console.log(isMatch)
 export default PasswordController;

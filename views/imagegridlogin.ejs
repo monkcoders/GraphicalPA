@@ -27,7 +27,7 @@
     </style>
   </head>
   <body>
-    <h1>Image Grid Example</h1>
+    <h1 class="justify-content-center">Select image password pattern to login</h1>
     <div class="container h-100 d-flex align-items-center justify-content-center">
       <div class="row justify-content-md-center row-style">
         <% items.forEach(function(element) { %>
@@ -40,7 +40,7 @@
       </div>
       
     </div>
-    <form action="/api/user/setpassword/" method="post">
+    <form action="/api/user/password" method="post">
       <input type="hidden" name="imageIds" id="imageIdsInput">
       <input type="hidden" name="userId" id = "userId" data-user-id="<%= userId %>">
       <button type="submit" onclick="passData()">Submit</button>
