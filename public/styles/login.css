@@ -34,6 +34,15 @@ h1 {
 .main-agileits {
     padding: 5em 0 0;
 }
+
+.selected {
+    opacity: 0.8;
+    filter: grayscale(30%) brightness(50%);
+    border: 5px solid rgb(146, 144, 144);
+    border-radius: 10px;
+  }
+  
+
 .mainw3-agileinfo {
     width: 30%;
     margin: 4em auto;

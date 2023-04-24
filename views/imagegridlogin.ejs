@@ -8,7 +8,9 @@
    
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
+<link href="/styles/login.css" rel="stylesheet" type="text/css" media="all" /> 
+   
+   <style>
       .img-dim{
         height: 150px;
         width: 150px;
@@ -43,7 +45,8 @@
     <form action="/api/user/password" method="post">
       <input type="hidden" name="imageIds" id="imageIdsInput">
       <input type="hidden" name="userId" id = "userId" data-user-id="<%= userId %>">
-      <button type="submit" onclick="passData()">Submit</button>
+      <button type="submit" class="button button-block" onclick="passData()">Submit</button>
+
     </form>
     <!-- Include Bootstrap JS -->
     <script>
@@ -61,7 +64,7 @@ images.forEach(image => {
     
     // Add the image ID to the array
     imageIds.push(imageId);
-    
+    image.classList.add("selected");
     // Do something with the image IDs
     console.log(imageIds);
   });

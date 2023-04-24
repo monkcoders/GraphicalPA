@@ -35,18 +35,19 @@ class PasswordController{
             const hashedPasssword = (await this.generatePasswordHash(imageIds, tempUserData.email)).hashedPassword
             console.log(hashedPasssword)
          await tempUserData.updateOne({$set:{password:hashedPasssword, isRegistered:true}})   
+         
          const registerUser  = new UserModel({
             name:tempUserData.name,
             email:tempUserData.email,
             mobileNo:tempUserData.mobileNo,
-            password:tempUserData.password,
+            password:hashedPasssword,
             imageSetId:tempUserData.imageSetId
          })
          registerUser.save()
          console.log(registerUser)
          const userData = await UserModel.findById(registerUser._id)
          console.log(userData)
-         res.render('dashboard',{userData:userData} )
+         res.render('dashboard',{userData:registerUser} )
         }
 
     }

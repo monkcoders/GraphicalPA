@@ -17,7 +17,9 @@ router.post('/login', UserController.userLogin);
 router.get('/uploadimages',imageController.getImage )
 router.post('/uploadimages',imageController.upload.array('image',16), imageController.postImage);
 
-
+router.get('/', (req,res)=>{
+    res.render('index')
+})
 //for setting and checking passwords
 router.post('/setpassword',PasswordController.setPassword)
 router.post('/password', PasswordController.checkLoginPassword)

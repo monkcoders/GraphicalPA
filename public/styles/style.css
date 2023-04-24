@@ -14,7 +14,7 @@ html {
 }
 
 body {
-  background: url("/img/background.jpg") no-repeat center center/cover;
+  background: url("/images/background.jpg") no-repeat center center/cover;
   height: 200vh;
   overflow: auto;
 
@@ -93,7 +93,8 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30vh;
+  height: fit-content;
+  padding: 30px;
 }
 
 section h2 {
