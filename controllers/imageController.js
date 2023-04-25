@@ -66,7 +66,7 @@ class imageController{
             console.log(newImageSet)
             await newImageSet.save()
             await Promise.all(promises);
-            res.redirect('/api/user/');
+            res.redirect('/api/user/uploadimages');
         } catch (error) {
             console.log(error);
             next(error);
