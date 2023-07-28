@@ -8,6 +8,8 @@ import userRoutes from './routes/userRoutes.js'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import bodyParser from 'body-parser'
+// const serverless= require('serverless-http')
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -42,7 +44,11 @@ connectDB(DATABASE_URL);
 
 
 //load routes
-app.use("/api/user",userRoutes )
+app.use("/",userRoutes )
+// app.use("/.netlify/functions/api/user",userRoutes )
+
+
+// module.exports.handler = serverless(app);
 
 app.listen(port,()=>{
     console.log(`Server listening at http://localhost:${port}`)
